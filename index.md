@@ -1,37 +1,103 @@
-## Welcome to GitHub Pages
+## Lab 6
 
-You can use the [editor on GitHub](https://github.com/killua-boop/cit281-lab6/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+``` markdown
+Goals and Outcomes
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+  - Join GitHub and work through Introduction to GitHub course
+  - Create lab file
+  - Classes overview
+  - Create and test Book class
+  - Create and test Library class
+  - Add at least two more books to the library
+  - Add ISBN and a delete book method
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Lab-06.js
 
-### Jekyll Themes
+```rouge
+  `/*
+    CIT 281 Lab 6
+    Name: Emily Deng
+*/
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/killua-boop/cit281-lab6/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+class Book {
+    constructor(title, author, pubDate, isbn) {
+      this.title = title;
+      this.author = author;
+      this.pubDate = pubDate;
+      this.isbn = isbn;
+    }
+  }
 
-### Support or Contact
+  class Library {
+    constructor(name) {
+      this._name = name;
+      this._books = [];
+    }
+    get books() {
+      // Return copy of books
+      return JSON.parse(JSON.stringify(this._books));
+    }
+    get count() {
+      return this._books.length;
+    }
+    addBook(book = {}) {
+      const { title = "", author = "", pubDate = "", isbn = ""} = book;
+      if (title.length > 0 && author.length > 0) {
+        const newBook = { title, author, pubDate, isbn};
+        this._books.push(newBook);
+      }
+    }
+    listBooks() {
+      for (const book of this._books) {
+        const {title, author, pubDate, isbn} = book;
+        console.log(`Title: ${title}, Author: ${author}, PubDate: ${pubDate}, ISBN: ${isbn}`);
+      }
+    }
+    deleteBook(isbn) {
+        // 1) Find the book to remove (via ISBN) from "this._books"
+        // a) Loop over all books
+        // b) Filter
+        // c) Move to step 2 once a condition has been met (this condition may be equal to the filter)
+        // 2) Remove the book from "this._books"
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+        // 1) initialize some variable to null (or zero)
+        // 2) Iterate over a collection/array of objects
+        //      3) Filter these objects 
+        //          4) Update the variables in (1)
+        //          4*) (optionally) break out of the iteration early
+        // 5) Variable in (1) is now good to go
+
+        let indexOfBookToRemove = null; // step 1
+        for (let index = 0; index < this._books.length; index++) {  //step 2
+            if (this._books[index].isbn == isbn) { // step 3
+                indexOfBookToRemove = index; // step 4
+                break; // step 4*
+            }
+        }
+        // Move on and use indexOfBookToRemove in the subsequent removal process
+        this._books.splice(indexOfBookToRemove, 1);
+
+    }
+  }
+
+const myBook = new Book('AP Calc Crash Course','Banu et al.', '01/01/2013', '123456789');
+const atomicHabits = new Book('Atomic Habits', 'James Clear', '10/16/2018', '0987654');
+// add two new books
+const jjkVolume = new Book('Jujutsu Kaisen', 'Gege Akutami', '12/04/2018', '4567890');
+const spyFamily = new Book('Spy x Family', 'Tatsuya Endo', '06/02/2020', '2350867');
+
+
+const uoLibrary = new Library('Knight Library');
+uoLibrary.addBook(myBook);
+uoLibrary.addBook(atomicHabits);
+uoLibrary.addBook(jjkVolume);
+uoLibrary.addBook(spyFamily);
+uoLibrary.listBooks();
+
+console.log('Deleting Book');
+uoLibrary.deleteBook('123456789');
+uoLibrary.listBooks();`
+
+```
